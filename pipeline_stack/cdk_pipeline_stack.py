@@ -8,7 +8,8 @@ from aws_cdk import (
     pipelines,
 )
 
-from .app_stage import AppStage
+from .network_stage import NetworkStage
+
 
 class CdkPipelineStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, params: dict, **kwargs):
@@ -20,16 +21,6 @@ class CdkPipelineStack(core.Stack):
         pipeline = pipelines.CdkPipeline(self, 'CdkPipeline', 
             cloud_assembly_artifact=cloud_assembly_artifact,
             pipeline_name=params['pipeline_name'],            
-            # source_action=cpactions.GitHubSourceAction(
-            #     # https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-codepipeline-actions.GitHubSourceActionProps.html
-            #     action_name='GithubAction',
-            #     output=source_artifact,
-            #     oauth_token=core.SecretValue.secrets_manager(pipeline_config['github_oauth_token']),
-            #     # https://docs.aws.amazon.com/ko_kr/codepipeline/latest/userguide/welcome.html
-            #     owner=pipeline_config['github_owner'],
-            #     repo=pipeline_config['github_repo'],
-            #     branch=pipeline_config['github_branch'],
-            #     trigger=cpactions.GitHubTrigger.WEBHOOK),
             source_action=cpactions.BitBucketSourceAction(
                 action_name='GithubAction',
                 output=source_artifact,
@@ -52,4 +43,4 @@ class CdkPipelineStack(core.Stack):
             )
         )
 
-        pipeline.add_application_stage(AppStage(self, 'Prod'))
+        pipeline.add_application_stage(NetworkStage(self, 'datapipeline-demo'))

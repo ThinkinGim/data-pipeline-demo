@@ -1,9 +1,9 @@
 from aws_cdk import core
 
-from app_stack.my_service_stack import MyServiceStack
+from app_stack.network_stack import NetworkStack
 
-class AppStage(core.Stage):
+class NetworkStage(core.Stage):
     def __init__(self, scope: core.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
 
-        MyServiceStack(self, 'MyServiceStack')
+        NetworkStack(self, 'Network')
