@@ -6,9 +6,7 @@ from aws_cdk import (
     pipelines,
 )
 
-from .network_stage import NetworkStage
-from .src_database_stage import SrcDatabaseStage
-
+from .deployment_stage import DeploymentStage
 
 class CdkPipelineStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, params: dict, **kwargs):
@@ -17,7 +15,7 @@ class CdkPipelineStack(core.Stack):
         source_artifact = codepipeline.Artifact()
         cloud_assembly_artifact = codepipeline.Artifact()
 
-        pipeline = pipelines.CdkPipeline(self, 'CdkPipeline', 
+        pipeline = pipelines.CdkPipeline(self, 'datapipeline-demo-cd', 
             cloud_assembly_artifact=cloud_assembly_artifact,
             pipeline_name=params['pipeline_name'],            
             source_action=cpactions.BitBucketSourceAction(
@@ -42,5 +40,4 @@ class CdkPipelineStack(core.Stack):
             )
         )
 
-        pipeline.add_application_stage(NetworkStage(self, 'datapipeline-demo'))
-        pipeline.add_application_stage(SrcDatabaseStage(self, 'source-database'))
+        pipeline.add_application_stage(DeploymentStage(self, 'datapipeline-demo'))
