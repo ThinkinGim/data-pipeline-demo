@@ -9,6 +9,7 @@ from aws_cdk import (
 )
 
 from .network_stage import NetworkStage
+from .src_database_stage import SrcDatabaseStage
 
 
 class CdkPipelineStack(core.Stack):
@@ -44,3 +45,4 @@ class CdkPipelineStack(core.Stack):
         )
 
         pipeline.add_application_stage(NetworkStage(self, 'datapipeline-demo'))
+        pipeline.add_application_stage(SrcDatabaseStage(self, 'source-database'))

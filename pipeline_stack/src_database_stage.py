@@ -1,9 +1,9 @@
 from aws_cdk import core
 
-from app_stack.source_db_stack import SourceDBStack
+from app_stack.src_database_stack import SrcDatabaseStack
 
-class SourceDBStage(core.Stage):
+class SrcDatabaseStage(core.Stage):
     def __init__(self, scope: core.Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
 
-        SourceDBStack(self, 'SourceDBStack')
+        SrcDatabaseStack(self, 'Src-DB')
