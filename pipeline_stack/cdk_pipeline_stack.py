@@ -1,8 +1,6 @@
 from aws_cdk import (
     core,
-    aws_ec2,
     aws_iam,
-    aws_lambda as _lambda,
     aws_codepipeline as codepipeline,
     aws_codepipeline_actions as cpactions,
     pipelines,
