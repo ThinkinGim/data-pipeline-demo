@@ -2,6 +2,7 @@ from aws_cdk import (
     core,
     aws_ec2,
     aws_rds as rds,
+    aws_dms as dms,
 )
 
 class SrcDatabaseStack(core.Stack):
@@ -13,7 +14,7 @@ class SrcDatabaseStack(core.Stack):
 
         _subnets=[]
         _subnets.append(
-            aws_ec2.Subnet(self, "sbn-sourcedb-1",
+            aws_ec2.Subnet(self, 'sbn-sourcedb-1',
                 availability_zone=vpc.availability_zones[0],
                 vpc_id=vpc.vpc_id,
                 cidr_block='10.0.1.0/24'
@@ -21,16 +22,15 @@ class SrcDatabaseStack(core.Stack):
         )
 
         _subnets.append(
-            aws_ec2.Subnet(self, "sbn-sourcedb-2",
+            aws_ec2.Subnet(self, 'sbn-sourcedb-2',
                 availability_zone=vpc.availability_zones[1],
                 vpc_id=vpc.vpc_id,
                 cidr_block='10.0.2.0/24'
             )
         )
 
-        rds.DatabaseInstance(self, "src_ora",
+        rds.DatabaseInstance(self, 'src_ora',
             engine=rds.DatabaseInstanceEngine.POSTGRES,
             vpc=vpc,
             vpc_subnets=aws_ec2.SubnetSelection(subnets=_subnets)
         )
-

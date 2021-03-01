@@ -33,7 +33,20 @@ class CdkPipelineStack(core.Stack):
                     aws_iam.PolicyStatement(
                         actions=["secretsmanager:GetSecretValue"],
                         resources=[params['secret_arn']]
-                    )
+                    ),
+                    aws_iam.PolicyStatement(
+                        actions=[
+                            "ec2:CreateNetworkInterface",
+                            "ec2:DescribeAvailabilityZones",
+                            "ec2:DescribeInternetGateways",
+                            "ec2:DescribeSecurityGroups",
+                            "ec2:DescribeSubnets",
+                            "ec2:DescribeVpcs",
+                            "ec2:DeleteNetworkInterface",
+                            "ec2:ModifyNetworkInterfaceAttribute"
+                        ],
+                        resources=['*']
+                    ),
                 ],
                 install_command='npm install -g aws-cdk && pip install --upgrade pip && pip install -r requirements.txt',
                 synth_command="cdk synth -v -c region=%s -c secret_name=%s"%(params['region'],params['secret_name']),
