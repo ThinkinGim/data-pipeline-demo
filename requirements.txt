@@ -35,6 +35,7 @@ aws-cdk.aws-kms==1.91.0
 aws-cdk.aws-lambda==1.91.0
 aws-cdk.aws-logs==1.91.0
 aws-cdk.aws-rds==1.91.0
+aws-cdk.aws-redshift==1.91.0
 aws-cdk.aws-route53==1.91.0
 aws-cdk.aws-route53-targets==1.91.0
 aws-cdk.aws-s3==1.91.0

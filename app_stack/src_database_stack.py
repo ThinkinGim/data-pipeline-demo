@@ -10,8 +10,6 @@ class SrcDatabaseStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, vpc: aws_ec2.Vpc, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-        # core.CfnOutput(self,'vpc_name',value=_vpc.to_string())
-
         _subnets=[]
         _subnets.append(
             aws_ec2.Subnet(self, 'sbn-sourcedb-1',
@@ -29,8 +27,16 @@ class SrcDatabaseStack(core.Stack):
             )
         )
 
-        rds.DatabaseInstance(self, 'src_ora',
+        _postgres_instance=rds.DatabaseInstance(self, 'src_ora',
             engine=rds.DatabaseInstanceEngine.POSTGRES,
             vpc=vpc,
             vpc_subnets=aws_ec2.SubnetSelection(subnets=_subnets)
         )
+
+        self._db_secret=_postgres_instance.secret
+
+    @property
+    def db_secret(self):
+        return self._db_secret
+    
+

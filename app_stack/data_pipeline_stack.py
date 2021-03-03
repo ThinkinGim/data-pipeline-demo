@@ -49,3 +49,9 @@ class DataPipelineStack(core.Stack):
             replication_subnet_group_identifier=_subnet_group_id
         )
 
+        # dms.CfnEndpoint(self, 'dms-src',
+        #     endpoint_type='source',
+        #     engine_name='demo-dms-src',
+
+        # )
+

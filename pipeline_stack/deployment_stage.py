@@ -2,6 +2,7 @@ from aws_cdk import core
 
 from app_stack.network_stack import NetworkStack
 from app_stack.src_database_stack import SrcDatabaseStack
+from app_stack.des_redshift_stack import DesRedshiftStack
 from app_stack.data_pipeline_stack import DataPipelineStack
 
 class DeploymentStage(core.Stage):
@@ -9,5 +10,6 @@ class DeploymentStage(core.Stage):
         super().__init__(scope, id, **kwargs)
 
         _network = NetworkStack(self, 'Network')
-        SrcDatabaseStack(self, 'SrcDatabase', vpc=_network.vpc)
-        DataPipelineStack(self, 'DataPipeline', vpc=_network.vpc)
+        _src_database=SrcDatabaseStack(self, 'SrcDatabase', vpc=_network.vpc)
+        DesRedshiftStack(self, 'DesRedshift', vpc=_network.vpc)
+        _data_pipeline_stack=DataPipelineStack(self, 'DataPipeline', vpc=_network.vpc)
