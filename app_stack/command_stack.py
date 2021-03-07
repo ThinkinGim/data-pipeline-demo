@@ -10,6 +10,8 @@ class CommandStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, 
             vpc: aws_ec2.Vpc,
             cmd_subnet: aws_ec2.Subnet,
+            db_secret_name: str,
+            db_secret_arn: str,
             **kwargs) -> None:
 
         super().__init__(scope, id, **kwargs)
@@ -32,6 +34,18 @@ class CommandStack(core.Stack):
             )
         )
 
+        cmd_role_init_src_db.add_to_policy(
+            aws_iam.PolicyStatement(
+                resources=[db_secret_arn],
+                actions=[
+                    "secretsmanager:GetResourcePolicy",
+                    "secretsmanager:GetSecretValue",
+                    "secretsmanager:DescribeSecret",
+                    "secretsmanager:ListSecretVersionIds"
+                ]
+            )
+        )
+
         cmd_func_init_src_db = aws_lambda.Function(self, 'cmd_func_init_src_db',
             function_name='demo_cmd_func_init_src_db',
             handler='cmd_init_src_db.init',
@@ -42,8 +56,8 @@ class CommandStack(core.Stack):
             allow_public_subnet=False,
             vpc=vpc,
             vpc_subnets=aws_ec2.SubnetSelection(subnets=[cmd_subnet]),
-            # environment={
-            #     'db_secret': src_db_secret_name
-            # }
+            environment={
+                'db_secret': db_secret_name
+            }
         )
     

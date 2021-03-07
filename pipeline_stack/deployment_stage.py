@@ -17,5 +17,7 @@ class DeploymentStage(core.Stage):
         _data_pipeline_stack=DataPipelineStack(self, 'DataPipeline', vpc=_network.vpc)
         _cmd = CommandStack(self, 'Command', 
             vpc=_network.vpc,
-            cmd_subnet=_network.cmd_subnet
+            cmd_subnet=_network.cmd_subnet,
+            db_secret_name=_src_database.secret_name,
+            db_secret_arn=_src_database.secret_arn
         )
