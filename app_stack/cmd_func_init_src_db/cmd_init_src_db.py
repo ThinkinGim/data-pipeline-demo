@@ -6,11 +6,13 @@ import os
 
 def init(event, context):
 
+    db_secret_name = os.environ.get('db_secret')
+
     session = boto3.session.Session()
     client = session.client(service_name='secretsmanager')
 
     try:
-        secret_response = client.get_secret_value(SecretId='srcoraSecret5F1A3316-8BqwkVEoUgXv-0w9zQw')
+        secret_response = client.get_secret_value(SecretId=db_secret_name)
     except ClientError as e:
         print(e.response)
         print(e.response['Error']['Code'])
