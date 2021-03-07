@@ -8,19 +8,11 @@ from aws_cdk import (
 class CommandStack(core.Stack):
 
     def __init__(self, scope: core.Construct, id: str, 
-            vpc: aws_ec2.Vpc, 
-            src_db_secret_name: str,
+            vpc: aws_ec2.Vpc,
+            cmd_subnet: aws_ec2.Subnet,
             **kwargs) -> None:
 
         super().__init__(scope, id, **kwargs)
-
-        subnet = aws_ec2.Subnet(self, 'sbn-cmd-1',
-            availability_zone=vpc.availability_zones[0],
-            vpc_id=vpc.vpc_id,
-            cidr_block='10.0.5.192/26'
-        )
-
-        self._subnet=subnet
 
         cmd_role_init_src_db = aws_iam.Role(self, 'cmd_role_init_src_db',
             assumed_by=aws_iam.ServicePrincipal("lambda.amazonaws.com")
@@ -49,12 +41,9 @@ class CommandStack(core.Stack):
             timeout=core.Duration.seconds(900),
             allow_public_subnet=False,
             vpc=vpc,
-            vpc_subnets=aws_ec2.SubnetSelection(subnets=[subnet]),
-            environment={
-                'db_secret': src_db_secret_name
-            }
+            vpc_subnets=aws_ec2.SubnetSelection(subnets=[cmd_subnet]),
+            # environment={
+            #     'db_secret': src_db_secret_name
+            # }
         )
-
-    @property
-    def subnet(self):
-        return self._subnet
+    

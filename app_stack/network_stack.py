@@ -14,4 +14,16 @@ class NetworkStack(core.Stack):
             subnet_configuration=[]
         )
 
+        cmd_subnet = aws_ec2.Subnet(self, 'sbn-cmd-1',
+            availability_zone=vpc.availability_zones[0],
+            vpc_id=vpc.vpc_id,
+            cidr_block='10.0.5.192/26'
+        )
+
+        vpc.add_interface_endpoint('secretmanager',
+            service=aws_ec2.InterfaceVpcEndpointAwsService.SECRETS_MANAGER,
+            subnets=aws_ec2.SubnetSelection(subnets=[cmd_subnet])
+        )
+
         self.vpc=vpc
+        self.cmd_subnet=cmd_subnet
