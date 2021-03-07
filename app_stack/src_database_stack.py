@@ -33,10 +33,15 @@ class SrcDatabaseStack(core.Stack):
             vpc_subnets=aws_ec2.SubnetSelection(subnets=_subnets)
         )
 
-        self._db_secret=_postgres_instance.secret
+        core.CfnOutput(self, 'secret_name', value=_postgres_instance.secret.secret_name)
+
+        self._secret_name=_postgres_instance.secret.secret_name
+        self._secret_arn=_postgres_instance.secret.secret_arn
 
     @property
-    def db_secret(self):
-        return self._db_secret
-    
+    def secret_name(self):
+        return self._secret_name
 
+    @property
+    def secret_arn(self):
+        return self._secret_arn
