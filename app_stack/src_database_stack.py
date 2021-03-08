@@ -27,10 +27,25 @@ class SrcDatabaseStack(core.Stack):
             )
         )
 
+        db_security_group = aws_ec2.SecurityGroup(self, 'sg-src-db',
+            vpc=vpc
+        )
+
+        db_security_group.add_ingress_rule(
+            peer=aws_ec2.Peer.ipv4('10.0.5.192/26'),
+            connection=aws_ec2.Port(
+                protocol=aws_ec2.Protocol.TCP,
+                string_representation="to allow traffic from the cmd",
+                from_port=5432,
+                to_port=5432
+            )
+        )
+
         _postgres_instance=rds.DatabaseInstance(self, 'src_ora',
             engine=rds.DatabaseInstanceEngine.POSTGRES,
             vpc=vpc,
-            vpc_subnets=aws_ec2.SubnetSelection(subnets=_subnets)
+            vpc_subnets=aws_ec2.SubnetSelection(subnets=_subnets),
+            security_groups=[db_security_group]
         )
 
         core.CfnOutput(self, 'secret_name', value=_postgres_instance.secret.secret_name)
