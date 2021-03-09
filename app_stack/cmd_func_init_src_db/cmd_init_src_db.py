@@ -25,11 +25,11 @@ def init(event, context):
 
             db_conn = psycopg2.connect(
                 host=secret_data['host'],
-                dbname='public',
+                dbname='postgres',
                 user=secret_data['username'],
-                password=secret_data['username']
+                password=secret_data['password']
             )
-            cur = conn.cursor()
+            cur = db_conn.cursor()
             cur.execute("select tablename from pg_catalog.pg_tables;")
             print("########################## executing query")
             print(cur.fetchone())
